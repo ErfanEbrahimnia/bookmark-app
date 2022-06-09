@@ -12,6 +12,12 @@
     <link rel="stylesheet" href="/stylesheets/main.css" />
   </head>
   <body>
+    {{#if user}}
+      <div class="navbar">
+        <div class="username">{{user.username}}</div>
+        <a class="logout" href="/auth/logout">Logout</a>
+      </div>
+    {{/if}}
     {{{body}}}
   </body>
 </html>

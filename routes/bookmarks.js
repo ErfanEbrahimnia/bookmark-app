@@ -1,6 +1,7 @@
 var express = require("express");
 var router = express.Router();
 const Bookmark = require("../database/models/Bookmark");
+const ensureAuthentication = require("../middlewares/ensureAuthentication");
 
 function createLinkPreview(url) {
   return fetch(
@@ -8,9 +9,10 @@ function createLinkPreview(url) {
   ).then((response) => response.json());
 }
 
-router.post("/bookmarks", async (req, res, next) => {
+router.post("/bookmarks", ensureAuthentication, async (req, res, next) => {
   try {
     const { url } = req.body;
+    const user = req.user;
     const preview = await createLinkPreview(url);
 
     const bookmark = await Bookmark.query().insertAndFetch({
@@ -18,6 +20,7 @@ router.post("/bookmarks", async (req, res, next) => {
       description: preview.description,
       url: preview.url,
       image: preview.image,
+      userId: user.id,
     });
 
     res.json(bookmark.$toJson());
@@ -26,7 +29,7 @@ router.post("/bookmarks", async (req, res, next) => {
   }
 });
 
-router.patch("/bookmarks/:id", async (req, res, next) => {
+router.patch("/bookmarks/:id", ensureAuthentication, async (req, res, next) => {
   try {
     const { id } = req.params;
     const { like } = req.body;
@@ -40,15 +43,19 @@ router.patch("/bookmarks/:id", async (req, res, next) => {
   }
 });
 
-router.delete("/bookmarks/:id", async (req, res, next) => {
-  try {
-    const { id } = req.params;
-    await Bookmark.query().deleteById(id);
+router.delete(
+  "/bookmarks/:id",
+  ensureAuthentication,
+  async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      await Bookmark.query().deleteById(id);
 
-    res.end();
-  } catch (error) {
-    next(error);
+      res.end();
+    } catch (error) {
+      next(error);
+    }
   }
-});
+);
 
 module.exports = router;
