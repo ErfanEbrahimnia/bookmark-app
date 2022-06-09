@@ -3,14 +3,24 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node ./bin/www",
+    "dev": "npx dotenv -e .env -v NODE_ENV=development nodemon ./bin/www",
+    "db:migrations": "dotenv -e .env knex migrate:latest",
+    "db:migration:create": "knex migrate:make"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
+    "dotenv-cli": "^5.1.0",
     "express": "~4.16.1",
     "hbs": "~4.0.4",
     "http-errors": "~1.6.3",
-    "morgan": "~1.9.1"
+    "knex": "^2.1.0",
+    "morgan": "~1.9.1",
+    "objection": "^3.0.1",
+    "pg": "^8.7.3"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.16"
   }
 }
