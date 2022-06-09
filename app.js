@@ -10,7 +10,7 @@ const knexConfig = require("./knexfile.js");
 const indexRouter = require("./routes/index");
 const bookmarksRouter = require("./routes/bookmarks");
 
-const knex = Knex(knexConfig);
+const knex = Knex(knexConfig[process.env.NODE_ENV ?? "development"]);
 
 Model.knex(knex);
 
