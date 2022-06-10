@@ -85,6 +85,8 @@ app.use(
     cookie: {
       secure: process.env.NODE_ENV === "development" ? false : true,
       maxAge: 1000 * 60 * 60 * 24 * 30, // 30 days
+      httpOnly: false,
+      sameSite: "none",
     },
     store,
   })
