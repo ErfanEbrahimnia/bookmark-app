@@ -84,7 +84,7 @@ app.use(
       maxAge: 1000 * 60 * 60 * 24 * 30, // 30 days
       ...(process.env.NODE_ENV === "development"
         ? {}
-        : { httpOnly: true, secure: true, sameSite: "none" }),
+        : { httpOnly: false, secure: true, sameSite: "none" }),
     },
     store,
   })
