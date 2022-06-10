@@ -65,8 +65,6 @@ passport.use(
   )
 );
 
-app.enable("trust proxy");
-
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "hbs");
@@ -83,10 +81,10 @@ app.use(
     resave: false,
     saveUninitialized: false,
     cookie: {
-      secure: process.env.NODE_ENV === "development" ? false : true,
       maxAge: 1000 * 60 * 60 * 24 * 30, // 30 days
-      httpOnly: false,
-      sameSite: "none",
+      ...(process.env.NODE_ENV === "development"
+        ? {}
+        : { httpOnly: true, secure: true, sameSite: "none" }),
     },
     store,
   })
